@@ -1,4 +1,6 @@
 // server.js
+require('dotenv').config();
+
 const WebSocket = require('ws');
 const SocketServer = require('ws').Server;
 
