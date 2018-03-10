@@ -1,4 +1,8 @@
-const PORT        = process.env.PORT || 8080;
+// server.js
+const WebSocket = require('ws');
+const SocketServer = require('ws').Server;
+
+const PORT        = process.env.PORT || 3001;
 
 //USE FOR LOCAL ENVIRONMENT
 const ENV         = process.env.ENV || "development";
@@ -19,6 +23,25 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.listen(PORT, () => {
-  console.log("Example app listening on port " + PORT);
+const server = express()
+   // Make the express server serve static assets (html, javascript, css) from the /public folder
+  .use(express.static('public'))
+  .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+
+// Create the WebSockets server
+const wss = new SocketServer({ server });
+
+wss.broadcast = function broadcast(data) {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(data);
+    }
+  });
+};
+
+wss.on('connection', (ws, req) => {
+  ws.on('error', () => console.log('errored'));
+  ws.on('close', () => {
+  });
 });
+
