@@ -1,8 +1,8 @@
 // server.js
-require('dotenv').config();
+require("dotenv").config();
 
-const WebSocket = require('ws');
-const SocketServer = require('ws').Server;
+const WebSocket = require("ws");
+const SocketServer = require("ws").Server;
 
 const PORT        = process.env.PORT || 3001;
 
@@ -28,11 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 const server = express()
-   // Make the express server serve static assets (html, javascript, css) from the /public folder
-  .use(express.static('public'))
-  .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+  // Make the express server serve static assets (html, javascript, css) from the /public folder
+  .use(express.static("public"))
+  .listen(PORT, "0.0.0.0", "localhost", () => console.log(`Listening on ${ PORT }`));
 
-dataHelpers.serveParkadeData();
+// dataHelpers.serveParkadeData();
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
@@ -45,13 +45,15 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
-wss.on('connection', (ws, req) => {
-  ws.on('error', () => console.log('errored'));
+wss.on("connection", (ws, req) => {
+  // ws.on("error", () => console.log("errored"));
+  
+  console.log("Connected to server");
 
-  ws.send(dataHelpers.serveParkadeData())
+  // ws.send(dataHelpers.serveParkadeData());
 
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
+  // ws.on("close", () => {
+  //   console.log("Client disconnected");
+  // });
 });
 
