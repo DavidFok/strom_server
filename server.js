@@ -21,6 +21,8 @@ const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require("morgan");
 const knexLogger  = require("knex-logger");
 
+const dataHelpers = require("./lib/dataHelpers.js")(knex);
+
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -29,6 +31,8 @@ const server = express()
    // Make the express server serve static assets (html, javascript, css) from the /public folder
   .use(express.static('public'))
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
+
+dataHelpers.serveParkadeData();
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
@@ -43,7 +47,11 @@ wss.broadcast = function broadcast(data) {
 
 wss.on('connection', (ws, req) => {
   ws.on('error', () => console.log('errored'));
+
+  ws.send(dataHelpers.serveParkadeData())
+
   ws.on('close', () => {
+    console.log('Client disconnected');
   });
 });
 
