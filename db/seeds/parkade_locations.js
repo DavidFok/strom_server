@@ -14,8 +14,8 @@ exports.seed = function(knex, Promise) {
           occupied_regular: '0', 
           occupied_handicap: '0', 
           pay_to_park: false, 
-          open_time: '07:00:00.00 PST', 
-          close_time: '17:00:00.00 PST', 
+          open_time: '07:00:00.00', 
+          close_time: '17:00:00.00', 
           notes: "Dual-head ChargePoint station in unpaved parking lot (outside the gate to Cleveland Trail) Charging is free, 2 hour limit. If you don't have an RFID card or the ChargePoint app, you can call the 800 number shown on the front of the EVSE. There is also a standard outlet a few feet to the right of the ChargePoint. Public washroom facilities in the building next to the parking lot.", 
           address_id: 1 
         },
