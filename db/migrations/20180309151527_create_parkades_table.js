@@ -9,8 +9,8 @@ exports.up = function(knex, Promise) {
     table.integer('occupied_regular');
     table.integer('occupied_handicap');
     table.boolean('pay_to_park');
-    table.dateTime('open_time');
-    table.dateTime('close_time');
+    table.time('open_time');
+    table.time('close_time');
     table.string('notes', 1024);
   });
 };
