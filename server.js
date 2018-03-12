@@ -60,11 +60,11 @@ wss.on('connection', (ws, req) => {
 
   console.log('Client connected');
   
-  // ws.send(dataHelpers.serveParkadeData());
+  // On connection: send parkade data
   var promiseresult = dataHelpers.serveParkadeData();
   promiseresult.then((rows) => {
-    ws.send(JSON.stringify(rows));
-    // console.log(rows);
+    let sendData = {type: "parkadeData", data: rows}
+    ws.send(JSON.stringify(sendData));
   });
 
   ws.on('close', () => {
