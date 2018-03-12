@@ -55,18 +55,27 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
+
+
+
 wss.on("connection", (ws, req) => {
-  // ws.on("error", () => console.log("errored"));
-  
-  console.log("Connected to server");
+  ws.on("error", () => console.log("errored"));
 
   console.log('Client connected');
   
   // On connection: send parkade data
   var promiseresult = dataHelpers.serveParkadeData();
   promiseresult.then((rows) => {
+    console.log(rows);
     let sendData = {type: "parkadeData", data: rows}
     ws.send(JSON.stringify(sendData));
+    
+    //dummy send to test live update on map || it works!!!!!
+    // setTimeout(function() {
+    //   rows[0].occupied_regular = 4;
+    //   sendData = {type: "parkadeData", data: rows}
+    //   ws.send(JSON.stringify(sendData));
+    // }, 5000);
   });
 
   // ws.on("close", () => {
