@@ -1,15 +1,9 @@
 require("dotenv").config();
-
-const WebSocket = require("ws");
-const SocketServer = require("ws").Server;
+const WebSocket   = require("ws");
+const SocketServer= require("ws").Server;
 const express     = require("express");
 const bodyParser  = require("body-parser");
 const app         = express();
-
-const knexConfig  = require("./knexfile");
-const knex        = require("knex")(knexConfig[ENV]);
-const morgan      = require("morgan");
-const knexLogger  = require("knex-logger");
 
 const PORT        = process.env.PORT || 3001;
 
@@ -17,6 +11,11 @@ const PORT        = process.env.PORT || 3001;
 const ENV         = process.env.ENV || "development";
 //USE FOR HEROKU
 // const ENV = process.env.NODE_ENV || 'development';
+
+const knexConfig  = require("./knexfile");
+const knex        = require("knex")(knexConfig[ENV]);
+const morgan      = require("morgan");
+const knexLogger  = require("knex-logger");
 
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
 
