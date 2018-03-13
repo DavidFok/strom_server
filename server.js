@@ -49,7 +49,7 @@ wss.on("connection", (ws, req) => {
   // On connection: send parkade data
   let promiseresult = dataHelpers.serveParkadeData();
   promiseresult.then((rows) => {
-    let sendData = {type: "parkadeData", data: rows}
+    let sendData = {route: "parkadeData", data: rows}
     ws.send(JSON.stringify(sendData));
     
     // dummy send to test live update on map || it works!!!!!
@@ -65,16 +65,20 @@ wss.on("connection", (ws, req) => {
     let msg = JSON.parse(message);
     switch (msg.type) {
       case 'register':
-        let exists = dataHelpers.retrieveUser(msg.data.email);
-        let promiseresult = exists.then(dataHelpers.checkForUser(data));
-        
-        promiseresult.then((x) => {
-          if (x === false) {
-            ws.send(JSON.stringify({type: "registerData", data: "user exists"}));
-          } else {
-            ws.send(JSON.stringify({type: "registerData", data: "registered"}));
-          }
-        });
+        dataHelpers.retrieveUser(msg.data.email)
+          .then((result) => {
+            return dataHelpers.checkForUser(result);
+          })
+          .then((x) => {
+            if (x === false) {
+              console.log("user not registered");
+              ws.send(JSON.stringify({route: "registerData", type: "err", data: "user exists"}));
+            } else {
+              console.log("registering data");
+              dataHelpers.registerUser(msg.data);
+              ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registered"}));
+            }
+          });
         break;
     }
   });
