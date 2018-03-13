@@ -64,13 +64,12 @@ wss.on("connection", (ws, req) => {
   console.log('Client connected');
   
   // On connection: send parkade data
-  var promiseresult = dataHelpers.serveParkadeData();
+  let promiseresult = dataHelpers.serveParkadeData();
   promiseresult.then((rows) => {
-    console.log(rows);
     let sendData = {type: "parkadeData", data: rows}
     ws.send(JSON.stringify(sendData));
     
-    //dummy send to test live update on map || it works!!!!!
+    // dummy send to test live update on map || it works!!!!!
     // setTimeout(function() {
     //   rows[0].occupied_regular = 4;
     //   sendData = {type: "parkadeData", data: rows}
@@ -78,8 +77,72 @@ wss.on("connection", (ws, req) => {
     // }, 5000);
   });
 
-  // ws.on("close", () => {
-  //   console.log("Client disconnected");
-  // });
+  // receiving data from the client/user
+  ws.on('message', (message) => {
+    let msg = JSON.parse(message);
+    switch (msg.type) {
+      case 'register':
+        // Search db for user by email
+        let exists = dataHelpers.checkForUser(msg.data.email);
+        let promiseresult = exists.then((data) => {
+          // check db that user doesn't exist
+          if (data === []) {
+            return dataHelpers.registerUser(msg.data)
+          } else {
+            return new Promise((resolve, reject) => {
+              resolve(false);
+            })
+          }
+        });
+
+        promiseresult.then((x) => {
+          if (x === false) {
+            ws.send(JSON.stringify({type: "registerData", data: "user exists"}));
+          } else {
+            ws.send(JSON.stringify({type: "registerData", data: "registered"}));
+          }
+        })
+        break;
+    }
+  });
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+  });
 });
+
+
+// ======================= TEST CODE ======================= \\
+
+// let checkForUserTest = dataHelpers.checkForUser("bla@bla.bla");
+// checkForUserTest.then((rows) =>{
+//   console.log(rows)
+// });
+
+
+let insertUser = dataHelpers.registerUser({
+  first_name: 'Tony',
+  last_name: 'Ha',
+  student_id: 54321,
+  password_digest: 54321,
+  email: 'tony@ha.ha',
+  handicap: false,
+  street_line_1: "128 W Cordova St",
+  street_line_2: "#300",
+  city: "Vancouver",
+  province: "BC",
+  postal_code: "V6B1G8",
+  country: "Canada"
+});
+insertUser.then((result) => {
+  console.log(result)
+});
+
+
+// let insertUser = new Promise(function (resolve, reject) {
+//   resolve(false);
+// });
+// insertUser.then((result) => {
+//   console.log(result)
+// })
 
