@@ -1,17 +1,7 @@
-// server.js
 require("dotenv").config();
 
 const WebSocket = require("ws");
 const SocketServer = require("ws").Server;
-
-const PORT        = process.env.PORT || 3001;
-
-//USE FOR LOCAL ENVIRONMENT
-const ENV         = process.env.ENV || "development";
-
-//USE FOR HEROKU
-// const ENV = process.env.NODE_ENV || 'development';
-
 const express     = require("express");
 const bodyParser  = require("body-parser");
 const app         = express();
@@ -21,11 +11,12 @@ const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require("morgan");
 const knexLogger  = require("knex-logger");
 
-let parkades;
+const PORT        = process.env.PORT || 3001;
 
-function display(result){
-  parkades = result;
-}
+//USE FOR LOCAL ENVIRONMENT
+const ENV         = process.env.ENV || "development";
+//USE FOR HEROKU
+// const ENV = process.env.NODE_ENV || 'development';
 
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
 
@@ -40,10 +31,6 @@ const server = express()
 
 
 
-
-
-
-
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
@@ -55,13 +42,10 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
-
-
-
 wss.on("connection", (ws, req) => {
   ws.on("error", () => console.log("errored"));
-
   console.log('Client connected');
+  
   
   // On connection: send parkade data
   let promiseresult = dataHelpers.serveParkadeData();
@@ -82,26 +66,16 @@ wss.on("connection", (ws, req) => {
     let msg = JSON.parse(message);
     switch (msg.type) {
       case 'register':
-        // Search db for user by email
-        let exists = dataHelpers.checkForUser(msg.data.email);
-        let promiseresult = exists.then((data) => {
-          // check db that user doesn't exist
-          if (data === []) {
-            return dataHelpers.registerUser(msg.data)
-          } else {
-            return new Promise((resolve, reject) => {
-              resolve(false);
-            })
-          }
-        });
-
+        let exists = dataHelpers.retrieveUser(msg.data.email);
+        let promiseresult = exists.then(dataHelpers.checkForUser(data));
+        
         promiseresult.then((x) => {
           if (x === false) {
             ws.send(JSON.stringify({type: "registerData", data: "user exists"}));
           } else {
             ws.send(JSON.stringify({type: "registerData", data: "registered"}));
           }
-        })
+        });
         break;
     }
   });
