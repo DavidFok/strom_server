@@ -52,6 +52,14 @@ exports.seed = function(knex, Promise) {
           province: 'BC',
           postal_code: 'V6T1Z1',
           country: 'Canada'
+        },
+        {
+          street_line_1: '128 W Hastings St',
+          street_line_2: '#300',
+          city: 'Vancouver',
+          province: 'BC',
+          postal_code: 'V6B1G8',
+          country: 'Canada'
         }
       ]);
     });
