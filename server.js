@@ -120,23 +120,23 @@ wss.on("connection", (ws, req) => {
 // });
 
 
-let insertUser = dataHelpers.registerUser({
-  first_name: 'Tony',
-  last_name: 'Ha',
-  student_id: 54321,
-  password_digest: 54321,
-  email: 'tony@ha.ha',
-  handicap: false,
-  street_line_1: "128 W Cordova St",
-  street_line_2: "#300",
-  city: "Vancouver",
-  province: "BC",
-  postal_code: "V6B1G8",
-  country: "Canada"
-});
-insertUser.then((result) => {
-  console.log(result)
-});
+// let insertUser = dataHelpers.registerUser({
+//   first_name: 'Tony',
+//   last_name: 'Ha',
+//   student_id: 54321,
+//   password_digest: 54321,
+//   email: 'tony@ha.ha',
+//   handicap: false,
+//   street_line_1: "128 W Cordova St",
+//   street_line_2: "#300",
+//   city: "Vancouver",
+//   province: "BC",
+//   postal_code: "V6B1G8",
+//   country: "Canada"
+// });
+// insertUser.then((result) => {
+//   console.log(result)
+// });
 
 
 // let insertUser = new Promise(function (resolve, reject) {
