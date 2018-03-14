@@ -105,6 +105,7 @@ wss.on("connection", (ws, req) => {
             } else {
               // if the user is not in the database
               console.log("user is not in the database");
+              ws.send(JSON.stringify({route: 'loginData', type: 'err', data: 'user not found'}));
             }
           });           
         break;
