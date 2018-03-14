@@ -19,6 +19,11 @@ const knexLogger  = require("knex-logger");
 
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
 
+// array of active user sessions
+const userSessions = [];
+// functions for handling sessions
+const sessionHandlers = require("./lib/sessionHandlers.js")(knex, userSessions);
+
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -33,6 +38,9 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+
+
+// broadcast function
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
@@ -44,11 +52,14 @@ wss.broadcast = function broadcast(data) {
 wss.on("connection", (ws, req) => {
   ws.on("error", () => console.log("errored"));
   console.log('Client connected');
-  
+
+  // on session: create session and add to userSessions
+  sessionHandlers.createSession();
+  sessionHandlers.displaySessions();
   
   // On connection: send parkade data
-  let promiseresult = dataHelpers.serveParkadeData();
-  promiseresult.then((rows) => {
+  let promiseResult = dataHelpers.serveParkadeData();
+  promiseResult.then((rows) => {
     let sendData = {route: "parkadeData", data: rows}
     ws.send(JSON.stringify(sendData));
     
