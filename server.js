@@ -70,7 +70,7 @@ wss.on("connection", (ws, req) => {
             return dataHelpers.checkForUser(result);
           })
           .then((x) => {
-            if (x === false) {
+            if (x[0] === false) {
               console.log("user not registered");
               ws.send(JSON.stringify({route: "registerData", type: "err", data: "user exists"}));
             } else {
@@ -82,21 +82,29 @@ wss.on("connection", (ws, req) => {
         break;
       case 'login':
         // query database for user by email
+        console.log('login requested!');
         dataHelpers.retrieveUser(msg.data.email)
-        .then((result) => {
-          // check the nature of the result
-          return dataHelpers.checkForUser(result);
-        })
-        .then((x) => {
-          if (x === false) {
-            // if a user has been found
-            console.log("user has been found!");
-          } else {
-            // if a user has not been found
-            console.log("user not found");
-            ws.send(JSON.stringify({route: "loginData", type: "err", data: "user does not exist"}));
-          }
-        });
+          .then((result) => {
+            return dataHelpers.checkForUser(result);
+          })
+          .then((result) => {
+            let check = result[0];
+            let queried_data = result[1];
+            if (check === false){
+              // if the user is in the database
+              console.log("found user in database");
+              if (dataHelpers.checkUserPassword(msg.data.password, queried_data[0].password_digest)){
+                // if the password entered is correct
+                console.log("password correct!");
+              } else {
+                // if the password entered is incorrect
+                console.log("password incorrect!");
+              }
+            } else {
+              // if the user is not in the database
+              console.log("user is not in the database");
+            }
+          });           
         break;
     }
   });
