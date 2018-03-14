@@ -72,22 +72,33 @@ wss.on("connection", (ws, req) => {
     let msg = JSON.parse(message);
     switch (msg.type) {
       case 'register':
+      // REGISTRATION
         dataHelpers.retrieveUser(msg.data.email)
           .then((result) => {
             return dataHelpers.checkForUser(result);
           })
-          .then((x) => {
-            if (x[0] === false) {
+          .then((result) => {
+            let check = result[0];
+            let user = result[1][0];
+            if (check === false) {
+              // if the user is already registered
               console.log("user not registered");
               ws.send(JSON.stringify({route: "registerData", type: "err", data: "user exists"}));
             } else {
+              // if the user is not yet registered
               console.log("registering data");
+              // register user in database
               dataHelpers.registerUser(msg.data);
-              ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registered"}));
+              
+              // console log current sessions
+              sessionHandlers.displaySessions();
+              // send out session token and user information to the client
+              ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registration successful"}));
             }
           });
         break;
       case 'login':
+      // LOGIN
         // query database for user by email
         console.log('login requested!');
         dataHelpers.retrieveUser(msg.data.email)
