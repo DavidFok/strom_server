@@ -67,35 +67,39 @@ wss.on("connection", (ws, req) => {
     // }, 5000);
   });
 
+  const registration = (msg, ws) => {
+    dataHelpers.retrieveUser(msg.data.email)
+    .then((result) => {
+      return dataHelpers.checkForUser(result);
+    })
+    .then((result) => {
+      let check = result[0];
+      let user = result[1][0];
+      if (check === false) {
+        // if the user is already registered
+        console.log("user not registered");
+        ws.send(JSON.stringify({route: "registerData", type: "err", data: "user exists"}));
+      } else {
+        // if the user is not yet registered
+        console.log("registering data");
+        // register user in database
+        dataHelpers.registerUser(msg.data);
+        
+        // console log current sessions
+        sessionHandlers.displaySessions();
+        // send out session token and user information to the client
+        ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registration successful"}));
+      }
+    });
+  };
+
   // receiving data from the client/user
   ws.on('message', (message) => {
     let msg = JSON.parse(message);
     switch (msg.type) {
       case 'register':
       // REGISTRATION
-        dataHelpers.retrieveUser(msg.data.email)
-          .then((result) => {
-            return dataHelpers.checkForUser(result);
-          })
-          .then((result) => {
-            let check = result[0];
-            let user = result[1][0];
-            if (check === false) {
-              // if the user is already registered
-              console.log("user not registered");
-              ws.send(JSON.stringify({route: "registerData", type: "err", data: "user exists"}));
-            } else {
-              // if the user is not yet registered
-              console.log("registering data");
-              // register user in database
-              dataHelpers.registerUser(msg.data);
-              
-              // console log current sessions
-              sessionHandlers.displaySessions();
-              // send out session token and user information to the client
-              ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registration successful"}));
-            }
-          });
+        registration(msg, ws);
         break;
       case 'login':
       // LOGIN
