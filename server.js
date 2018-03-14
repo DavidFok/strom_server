@@ -108,6 +108,18 @@ wss.on("connection", (ws, req) => {
             }
           });           
         break;
+      case 'spots':
+        console.log('parking spots requested');
+        dataHelpers.getSpots(msg.data)
+          .then((result) => {
+            let outMsgVcle = {
+              route: "spots",
+              type: "confirm",
+              data: result  //result is an arry of parking_spot objects
+            }
+            ws.send(JSON.stringify(outMsgVcle));
+          })
+
     }
   });
 
