@@ -96,9 +96,11 @@ wss.on("connection", (ws, req) => {
               if (dataHelpers.checkUserPassword(msg.data.password, queried_data[0].password_digest)){
                 // if the password entered is correct
                 console.log("password correct!");
+                ws.send(JSON.stringify({route: 'loginData', type: "confirm", data: "login succesful"}));
               } else {
                 // if the password entered is incorrect
                 console.log("password incorrect!");
+                ws.send(JSON.stringify({route: 'loginData', type: "err", data: "password incorrect"}));
               }
             } else {
               // if the user is not in the database
