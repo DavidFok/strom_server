@@ -53,10 +53,6 @@ wss.on("connection", (ws, req) => {
   ws.on("error", () => console.log("errored"));
   console.log('Client connected');
 
-  // on session: create session and add to userSessions
-  sessionHandlers.createSession();
-  sessionHandlers.displaySessions();
-  
   // On connection: send parkade data
   let promiseResult = dataHelpers.serveParkadeData();
   promiseResult.then((rows) => {
@@ -100,14 +96,22 @@ wss.on("connection", (ws, req) => {
           })
           .then((result) => {
             let check = result[0];
-            let queried_data = result[1];
+            let user = result[1][0];
             if (check === false){
               // if the user is in the database
               console.log("found user in database");
-              if (dataHelpers.checkUserPassword(msg.data.password, queried_data[0].password_digest)){
+              if (dataHelpers.checkUserPassword(msg.data.password, user.password_digest)){
                 // if the password entered is correct
                 console.log("password correct!");
-                ws.send(JSON.stringify({route: 'loginData', type: "confirm", data: "login succesful"}));
+                console.log("user.id: ", user.id);
+                // create a session for the user
+                let token = sessionHandlers.createSession(user.id);
+                let data = {
+                  session_token: token,
+                  user: user
+                };
+                sessionHandlers.displaySessions();
+                ws.send(JSON.stringify({route: 'loginData', type: "confirm", data: data}));
               } else {
                 // if the password entered is incorrect
                 console.log("password incorrect!");
