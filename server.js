@@ -80,6 +80,24 @@ wss.on("connection", (ws, req) => {
             }
           });
         break;
+      case 'login':
+        // query database for user by email
+        dataHelpers.retrieveUser(msg.data.email)
+        .then((result) => {
+          // check the nature of the result
+          return dataHelpers.checkForUser(result);
+        })
+        .then((x) => {
+          if (x === false) {
+            // if a user has been found
+            console.log("user has been found!");
+          } else {
+            // if a user has not been found
+            console.log("user not found");
+            ws.send(JSON.stringify({route: "loginData", type: "err", data: "user does not exist"}));
+          }
+        });
+        break;
     }
   });
 
