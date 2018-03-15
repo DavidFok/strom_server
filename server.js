@@ -109,34 +109,36 @@ wss.on("connection", (ws, req) => {
       .then((result) => {
         return dataHelpers.checkForUser(result);
       })
-        .then((result) => {
-          let check = result[0];
-          let user = result[1][0];
-          if (check === false){
-            // if the user is in the database
-            console.log("found user in database");
-            if (dataHelpers.checkUserPassword(msg.data.password, user.password_digest)){
-              // if the password entered is correct
-              console.log("password correct!");
-              console.log("user.id: ", user.id);
-              // create a session for the user
-              let token = sessionHandlers.createSession(user.id);
-              let data = {
-                session_token: token,
-                user: user
-              };
-              sessionHandlers.displaySessions();
+      .then((result) => {
+        let check = result[0];
+        let user = result[1][0];
+        if (check === false){
+          // if the user is in the database
+          console.log("found user in database");
+          if (dataHelpers.checkUserPassword(msg.data.password, user.password_digest)){
+            // if the password entered is correct
+            console.log("password correct!");
+            console.log("user.id: ", user.id);
+            // create a session for the user
+            let token = sessionHandlers.createSession(user.id);
+            let data = {
+              session_token: token,
+              user: user
+            };
+            token.then(() => {
               ws.send(JSON.stringify({route: 'loginData', type: "confirm", data: data}));
-            } else {
-              // if the password entered is incorrect
-              console.log("password incorrect!");
-              ws.send(JSON.stringify({route: 'loginData', type: "err", data: "password incorrect"}));
-            }
+              sessionHandlers.displaySessions();
+            });
           } else {
-          // if the user is not in the database
-          console.log("user is not in the database");
-          ws.send(JSON.stringify({route: 'loginData', type: 'err', data: 'user not found'}));
+            // if the password entered is incorrect
+            console.log("password incorrect!");
+            ws.send(JSON.stringify({route: 'loginData', type: "err", data: "password incorrect"}));
           }
+        } else {
+        // if the user is not in the database
+        console.log("user is not in the database");
+        ws.send(JSON.stringify({route: 'loginData', type: 'err', data: 'user not found'}));
+        }
       });           
   };
 
