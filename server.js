@@ -20,9 +20,8 @@ const knexLogger  = require("knex-logger");
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
 
 // array of active user sessions
-const userSessions = [];
 // functions for handling sessions
-const sessionHandlers = require("./lib/sessionHandlers.js")(knex, userSessions);
+const sessionHandlers = require("./lib/sessionHandlers.js")(knex);
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
