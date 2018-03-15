@@ -141,12 +141,11 @@ wss.on("connection", (ws, req) => {
   };
 
   ws.on('message', (message) => {
-    // MESSAGES
     // when message is received from client
     let msg = JSON.parse(message);
     switch (msg.type) {
       case 'register':
-        // REGISTRATION
+        // REGISTRATION: Upon user registration
         registration(msg, ws, login).then((result) => {
           // if the registration was successful, login the user
           if(result){
@@ -155,7 +154,7 @@ wss.on("connection", (ws, req) => {
         })
         break;
       case 'login':
-        // LOGIN
+        // LOGIN: Upon user login
         login(msg, ws);
         break;
       case 'spots':
@@ -169,6 +168,11 @@ wss.on("connection", (ws, req) => {
             }
             ws.send(JSON.stringify(outMsgVcle));
           })
+        break;
+
+      case 'connection':
+        // CONNECTION: UPON user connection
+      
     }
   });
 
