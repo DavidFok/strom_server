@@ -67,8 +67,9 @@ wss.on("connection", (ws, req) => {
     // }, 5000);
   });
 
-  const registration = (msg, ws) => {
-    dataHelpers.retrieveUser(msg.data.email)
+  // registration function
+  const registration = (msg, ws, callback) => {
+    return dataHelpers.retrieveUser(msg.data.email)
     .then((result) => {
       return dataHelpers.checkForUser(result);
     })
@@ -77,67 +78,85 @@ wss.on("connection", (ws, req) => {
       let user = result[1][0];
       if (check === false) {
         // if the user is already registered
-        console.log("user not registered");
+        console.log("user is already registered");
         ws.send(JSON.stringify({route: "registerData", type: "err", data: "user exists"}));
+        return false;
       } else {
         // if the user is not yet registered
         console.log("registering data");
         // register user in database
-        dataHelpers.registerUser(msg.data);
-        
-        // console log current sessions
-        sessionHandlers.displaySessions();
-        // send out session token and user information to the client
-        ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registration successful"}));
+        return dataHelpers.registerUser(msg.data);
       }
-    });
+      
+    }).then((result) => {
+        // send out session token and user information to the client
+        if (result !== false){
+          // if the registration was successful
+          ws.send(JSON.stringify({route: "registerData", type: "confirm", data: "registration successful"}));
+          return true;
+        } else {
+          // if the registration was not successful
+          return false;
+        }
+      });
   };
 
-  // receiving data from the client/user
+  // login function
+  const login = (msg, ws) => {
+    // query database for user by email
+    console.log('login requested!');
+    dataHelpers.retrieveUser(msg.data.email)
+      .then((result) => {
+        return dataHelpers.checkForUser(result);
+      })
+        .then((result) => {
+          let check = result[0];
+          let user = result[1][0];
+          if (check === false){
+            // if the user is in the database
+            console.log("found user in database");
+            if (dataHelpers.checkUserPassword(msg.data.password, user.password_digest)){
+              // if the password entered is correct
+              console.log("password correct!");
+              console.log("user.id: ", user.id);
+              // create a session for the user
+              let token = sessionHandlers.createSession(user.id);
+              let data = {
+                session_token: token,
+                user: user
+              };
+              sessionHandlers.displaySessions();
+              ws.send(JSON.stringify({route: 'loginData', type: "confirm", data: data}));
+            } else {
+              // if the password entered is incorrect
+              console.log("password incorrect!");
+              ws.send(JSON.stringify({route: 'loginData', type: "err", data: "password incorrect"}));
+            }
+          } else {
+          // if the user is not in the database
+          console.log("user is not in the database");
+          ws.send(JSON.stringify({route: 'loginData', type: 'err', data: 'user not found'}));
+          }
+      });           
+  };
+
   ws.on('message', (message) => {
+    // MESSAGES
+    // when message is received from client
     let msg = JSON.parse(message);
     switch (msg.type) {
       case 'register':
-      // REGISTRATION
-        registration(msg, ws);
+        // REGISTRATION
+        registration(msg, ws, login).then((result) => {
+          // if the registration was successful, login the user
+          if(result){
+            login(msg, ws);
+          }
+        })
         break;
       case 'login':
-      // LOGIN
-        // query database for user by email
-        console.log('login requested!');
-        dataHelpers.retrieveUser(msg.data.email)
-          .then((result) => {
-            return dataHelpers.checkForUser(result);
-          })
-          .then((result) => {
-            let check = result[0];
-            let user = result[1][0];
-            if (check === false){
-              // if the user is in the database
-              console.log("found user in database");
-              if (dataHelpers.checkUserPassword(msg.data.password, user.password_digest)){
-                // if the password entered is correct
-                console.log("password correct!");
-                console.log("user.id: ", user.id);
-                // create a session for the user
-                let token = sessionHandlers.createSession(user.id);
-                let data = {
-                  session_token: token,
-                  user: user
-                };
-                sessionHandlers.displaySessions();
-                ws.send(JSON.stringify({route: 'loginData', type: "confirm", data: data}));
-              } else {
-                // if the password entered is incorrect
-                console.log("password incorrect!");
-                ws.send(JSON.stringify({route: 'loginData', type: "err", data: "password incorrect"}));
-              }
-            } else {
-              // if the user is not in the database
-              console.log("user is not in the database");
-              ws.send(JSON.stringify({route: 'loginData', type: 'err', data: 'user not found'}));
-            }
-          });           
+        // LOGIN
+        login(msg, ws);
         break;
       case 'spots':
         console.log('parking spots requested');
@@ -150,7 +169,6 @@ wss.on("connection", (ws, req) => {
             }
             ws.send(JSON.stringify(outMsgVcle));
           })
-
     }
   });
 
