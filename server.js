@@ -172,7 +172,7 @@ wss.on("connection", (ws, req) => {
 
       case 'connection':
         // CONNECTION: UPON user connection
-      
+        console.log('session_token received from client');
     }
   });
 
