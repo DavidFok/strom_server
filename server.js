@@ -170,7 +170,11 @@ wss.on("connection", (ws, req) => {
             ws.send(JSON.stringify(outMsgVcle));
           })
         break;
-
+      case 'logout':
+          if (msg.data !== null) {
+            sessionHandlers.deleteToken(msg.data);
+          }
+          break;
       case 'connection':
         // CONNECTION: UPON user connection
         console.log('session_token received from client');
