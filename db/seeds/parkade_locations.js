@@ -25,7 +25,7 @@ exports.seed = function(knex, Promise) {
           longitude: '-123.240157', 
           spot_count_regular: 8, 
           spot_count_handicap: 0, 
-          occupied_regular: 0, 
+          occupied_regular: 2, 
           occupied_handicap: 0, 
           pay_to_park: true, 
           open_time: '17:00:00.00', 

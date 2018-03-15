@@ -11,7 +11,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 1
+          parkade_id: 1,
+          in_use: false
         },
         {
           spot_label: 0000002,
@@ -19,7 +20,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 1
+          parkade_id: 1,
+          in_use: false
         },
         {
           spot_label: 0000003,
@@ -27,7 +29,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 1
+          parkade_id: 1,
+          in_use: false
         },
         {
           spot_label: 0000004,
@@ -35,7 +38,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 1
+          parkade_id: 1,
+          in_use: false
         },
         {
           spot_label: 0000005,
@@ -43,7 +47,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: false
         },
         {
           spot_label: 0000006,
@@ -51,7 +56,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: false
         },
         {
           spot_label: 0000007,
@@ -59,7 +65,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: false
         },
         {
           spot_label: 0000008,
@@ -67,7 +74,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: false
         },
         {
           spot_label: 0000009,
@@ -75,7 +83,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: true
         },
         {
           spot_label: 0000010,
@@ -83,7 +92,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: false
         },
         {
           spot_label: 0000011,
@@ -91,7 +101,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: false
         },
         {
           spot_label: 0000012,
@@ -99,7 +110,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'wall',
-          parkade_id: 2
+          parkade_id: 2,
+          in_use: true
         },
         {
           spot_label: 0000013,
@@ -107,7 +119,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000014,
@@ -115,7 +128,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000015,
@@ -123,7 +137,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000016,
@@ -131,7 +146,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000017,
@@ -139,7 +155,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000018,
@@ -147,7 +164,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000019,
@@ -155,7 +173,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000020,
@@ -163,7 +182,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 0,
           plug_type: 'J1772',
-          parkade_id: 3
+          parkade_id: 3,
+          in_use: false
         },
         {
           spot_label: 0000021,
@@ -171,7 +191,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 4
+          parkade_id: 4,
+          in_use: false
         },
         {
           spot_label: 0000022,
@@ -179,7 +200,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 4
+          parkade_id: 4,
+          in_use: false
         },
         {
           spot_label: 0000023,
@@ -187,7 +209,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 4
+          parkade_id: 4,
+          in_use: false
         },
         {
           spot_label: 0000024,
@@ -195,7 +218,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 4
+          parkade_id: 4,
+          in_use: false
         },
         {
           spot_label: 0000025,
@@ -203,7 +227,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 4
+          parkade_id: 4,
+          in_use: false
         },
         {
           spot_label: 0000026,
@@ -211,7 +236,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 5
+          parkade_id: 5,
+          in_use: true
         },
         {
           spot_label: 0000027,
@@ -219,7 +245,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 5
+          parkade_id: 5,
+          in_use: false
         },
         {
           spot_label: 0000028,
@@ -227,7 +254,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 5
+          parkade_id: 5,
+          in_use: false
         },
         {
           spot_label: 0000029,
@@ -235,7 +263,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 5
+          parkade_id: 5,
+          in_use: true
         },
         {
           spot_label: 0000030,
@@ -243,7 +272,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 5
+          parkade_id: 5,
+          in_use: true
         },
         {
           spot_label: 0000031,
@@ -251,7 +281,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 6
+          parkade_id: 6,
+          in_use: true
         },
         {
           spot_label: 0000032,
@@ -259,7 +290,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 6
+          parkade_id: 6,
+          in_use: true
         },
         {
           spot_label: 0000033,
@@ -267,7 +299,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 6
+          parkade_id: 6,
+          in_use: true
         },
         {
           spot_label: 0000034,
@@ -275,7 +308,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 6
+          parkade_id: 6,
+          in_use: true
         },
         {
           spot_label: 0000035,
@@ -283,7 +317,8 @@ exports.seed = function(knex, Promise) {
           electric: true,
           cents_per_kwh: 100,
           plug_type: 'J1772',
-          parkade_id: 6
+          parkade_id: 6,
+          in_use: true
         }
       ]);
     });

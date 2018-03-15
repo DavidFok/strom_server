@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
     table.boolean('electric');
     table.integer('cents_per_kwh');
     table.string('plug_type');
+    table.boolean('in_use');
   });
 };
 
