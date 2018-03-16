@@ -186,9 +186,9 @@ wss.on("connection", (ws, req) => {
             ws.send(JSON.stringify(outMsgVcle));
           });
         break;
-      case 'connection':
+      case 'session token':
         // CONNECTION: UPON user connection
-        console.log('session_token received from client');
+        console.log('session_token received from client: ', msg.data);
     }
   });
 
