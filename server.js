@@ -18,6 +18,7 @@ const morgan      = require("morgan");
 const knexLogger  = require("knex-logger");
 
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
+const time_tick = 1000;
 
 // array of active user sessions
 // functions for handling sessions
@@ -32,12 +33,19 @@ const server = express()
   .use(express.static("public"))
   .listen(PORT, "0.0.0.0", "localhost", () => console.log(`Listening on ${ PORT }`));
 
-
-
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+// keeps track of end times for charging sessions
+const session_end_times = []; 
+// load session end times from database into memory
+dataHelpers.loadSessionEndTimes().then((session_end_times) => {
+  session_end_times.forEach((session_end_time, index) => {
+    session_end_times.push(session_end_time);
+  });
+});
 
+console.log("session end times: ", session_end_times);
 
 // broadcast function
 wss.broadcast = function broadcast(data) {
@@ -47,6 +55,7 @@ wss.broadcast = function broadcast(data) {
     }
   });
 };
+
 
 wss.on("connection", (ws, req) => {
   ws.on("error", () => console.log("errored"));
