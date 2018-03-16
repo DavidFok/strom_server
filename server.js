@@ -59,11 +59,11 @@ wss.on("connection", (ws, req) => {
     ws.send(JSON.stringify(sendData));
     
     // dummy send to test live update on map || it works!!!!!
-    // setTimeout(function() {
-    //   rows[0].occupied_regular = 4;
-    //   sendData = {type: "parkadeData", data: rows}
-    //   ws.send(JSON.stringify(sendData));
-    // }, 5000);
+    setTimeout(function() {
+      rows[0].occupied_regular = 4;
+      sendData = {route: "parkadeData", data: rows}
+      ws.send(JSON.stringify(sendData));
+    }, 5000);
   });
 
   // registration function
