@@ -171,10 +171,21 @@ wss.on("connection", (ws, req) => {
           })
         break;
       case 'logout':
-          if (msg.data !== null) {
-            sessionHandlers.deleteToken(msg.data);
-          }
-          break;
+        if (msg.data !== null) {
+          sessionHandlers.deleteToken(msg.data);
+        }
+        break;
+      case 'session request':
+        dataHelpers.checkForSpot(msg.data)
+          .then((res) => {
+            let outMsgVcle = {
+              route: "session",
+              type: res[0],
+              data: res[1]  // a note for the client
+            }
+            ws.send(JSON.stringify(outMsgVcle));
+          });
+        break;
       case 'connection':
         // CONNECTION: UPON user connection
         console.log('session_token received from client');
