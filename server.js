@@ -59,11 +59,11 @@ wss.on("connection", (ws, req) => {
     ws.send(JSON.stringify(sendData));
     
     // dummy send to test live update on map || it works!!!!!
-    // setTimeout(function() {
-    //   rows[0].occupied_regular = 4;
-    //   sendData = {type: "parkadeData", data: rows}
-    //   ws.send(JSON.stringify(sendData));
-    // }, 5000);
+    setTimeout(function() {
+      rows[0].occupied_regular = 4;
+      sendData = {route: "parkadeData", data: rows}
+      ws.send(JSON.stringify(sendData));
+    }, 5000);
   });
 
   // registration function
@@ -176,15 +176,28 @@ wss.on("connection", (ws, req) => {
         }
         break;
       case 'session request':
-        dataHelpers.checkForSpot(msg.data)
-          .then((res) => {
-            let outMsgVcle = {
-              route: "session",
-              type: res[0],
-              data: res[1]  // a note for the client
+        sessionHandlers.handshake(msg.cookie)
+          .then((result) => {
+            console.log("handshake returned: ", result);
+            if (!result) {
+              ws.send(JSON.stringify({route: "session", type: "reject", data: "please login to begin a charging session"}))
+            } else {
+              dataHelpers.checkForSpot(msg.data)
+                .then((res) => {
+                  let outMsgVcle = {
+                    route: "session",
+                    type: res[0],
+                    data: res[1]  // a note for the client
+                  }
+                  if(res[0] === "confirm") {
+                    dataHelpers.createSession(result.userId, msg.data)
+                      .then(ws.send(JSON.stringify(outMsgVcle)));
+                  } else {
+                    ws.send(JSON.stringify(outMsgVcle));
+                  }
+                });
             }
-            ws.send(JSON.stringify(outMsgVcle));
-          });
+          })
         break;
       case 'session token':
         // CONNECTION: UPON user connection
