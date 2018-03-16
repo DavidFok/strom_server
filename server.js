@@ -171,7 +171,9 @@ wss.on("connection", (ws, req) => {
           })
         break;
       case 'logout':
-        if (msg.data !== null) {
+        console.log("message data: ", msg.data);
+        console.log("type of message data", typeof msg.data);
+        if (msg.data !== "null") {
           sessionHandlers.deleteToken(msg.data);
         }
         break;
@@ -200,6 +202,22 @@ wss.on("connection", (ws, req) => {
           })
         break;
       case 'session token':
+          sessionHandlers.handshake(msg.cookie)
+            .then((result) => {
+              console.log("handshake returned: ", result);
+              let outMsgVcle = {
+                route: "session token",
+                type: "reject",
+                data: null
+              };
+              if (result !== false) {
+                // if the session has been found
+                outMsgVcle.type = "confirm";
+              }
+
+              ws.send(JSON.stringify(outMsgVcle));
+
+            });
         // CONNECTION: UPON user connection
         console.log('session_token received from client: ', msg.data);
     }
