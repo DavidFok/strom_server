@@ -16,6 +16,7 @@ const knexConfig  = require("./knexfile");
 const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require("morgan");
 const knexLogger  = require("knex-logger");
+const moment = require('moment');
 
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
 const time_tick = 1000;
@@ -39,9 +40,9 @@ const wss = new SocketServer({ server });
 // keeps track of end times for charging sessions
 const session_end_times = []; 
 // load session end times from database into memory
-dataHelpers.loadSessionEndTimes().then((session_end_times) => {
-  session_end_times.forEach((session_end_time, index) => {
-    session_end_times.push(session_end_time);
+dataHelpers.loadSessionEndTimes().then((sessions) => {
+  sessions.forEach((session, index) => {
+    session_end_times.push(session);
   });
 });
 
@@ -202,7 +203,19 @@ wss.on("connection", (ws, req) => {
                   }
                   if(res[0] === "confirm") {
                     dataHelpers.createSession(result.userId, msg.data)
-                      .then(ws.send(JSON.stringify(outMsgVcle)));
+                      .then(() => {
+                        // send out new session confirmation to client side
+                        ws.send(JSON.stringify(outMsgVcle));
+                        // update list of active session termination times in memory
+                        start = moment();
+                        // create a new session record in memory
+                        let newSession = {
+                          user_id: result.userId,
+                          charge_end: start.add(30, 'minutes')
+                        };
+                        session_end_times.push(newSession);
+                        console.log("session end times: ", session_end_times);
+                      });
                   } else {
                     ws.send(JSON.stringify(outMsgVcle));
                   }
