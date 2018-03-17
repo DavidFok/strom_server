@@ -38,15 +38,15 @@ const server = express()
 const wss = new SocketServer({ server });
 
 // keeps track of end times for charging sessions
-const session_end_times = []; 
+const sessionEndTimes = []; 
 // load session end times from database into memory
 dataHelpers.loadSessionEndTimes().then((sessions) => {
   sessions.forEach((session, index) => {
-    session_end_times.push(session);
+    sessionEndTimes.push(session);
   });
 });
 
-console.log("session end times: ", session_end_times);
+console.log("session end times: ", sessionEndTimes);
 
 // broadcast function
 wss.broadcast = function broadcast(data) {
@@ -75,6 +75,24 @@ wss.on("connection", (ws, req) => {
       ws.send(JSON.stringify(sendData));
     }, 5000);
   });
+
+  // checks active charging sessions to see how much time is left for each
+  const checkMemoryForTimeOuts = ((sessionEndTimes) => {
+    // const currentTime = Date.now();
+    // const start = moment(currentTime, "HH:mm:ss");
+    sessionEndTimes.forEach((session, index) => {
+      const start = moment.utc();
+      const endTime = moment(session.charge_end);
+      const minuteDiff = endTime.diff(start, 'minutes');
+      const secondDiff = endTime.diff(start, 'seconds');
+      console.log(`Time Left: ${minuteDiff}:${secondDiff % 60}`);
+    });
+  });
+
+  // calls checkMemoryForTimeOuts every time tick interval (1 second)
+  setInterval(() => {
+    checkMemoryForTimeOuts(sessionEndTimes);
+  }, time_tick);
 
   // registration function
   const registration = (msg, ws, callback) => {
@@ -213,8 +231,8 @@ wss.on("connection", (ws, req) => {
                           user_id: result.userId,
                           charge_end: start.add(30, 'minutes')
                         };
-                        session_end_times.push(newSession);
-                        console.log("session end times: ", session_end_times);
+                        sessionEndTimes.push(newSession);
+                        console.log("session end times: ", sessionEndTimes.charge_end);
                       });
                   } else {
                     ws.send(JSON.stringify(outMsgVcle));
