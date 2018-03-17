@@ -21,6 +21,11 @@ const moment = require('moment');
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
 const time_tick = 1000;
 
+// Twilio Credentials
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
 // array of active user sessions
 // functions for handling sessions
 const sessionHandlers = require("./lib/sessionHandlers.js")(knex);
@@ -85,6 +90,18 @@ wss.on("connection", (ws, req) => {
       const endTime = moment(session.charge_end);
       const minuteDiff = endTime.diff(start, 'minutes');
       const secondDiff = endTime.diff(start, 'seconds');
+      
+      if (secondDiff === 300) {
+        // if there are 5 minutes left, send out a text message indicating this
+        client.messages
+        .create({
+          to: '+16479882942',
+          from: '+16476997492',
+          body: 'There are five minutes left in your charge session!'
+        })
+        .then(message => console.log(message.sid));
+      }
+
       console.log(`Time Left: ${minuteDiff}:${secondDiff % 60}`);
     });
   });
