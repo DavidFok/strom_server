@@ -82,46 +82,29 @@ wss.on("connection", (ws, req) => {
   });
 
   // checks active charging sessions to see how much time is left for each
-  const checkMemoryForTimeOuts = ((sessionEndTimes) => {
-    // const currentTime = Date.now();
-    // const start = moment(currentTime, "HH:mm:ss");
-    sessionEndTimes.forEach((session, index) => {
-      const start = moment.utc();
-      const endTime = moment(session.charge_end);
-      const minuteDiff = endTime.diff(start, 'minutes');
-      const secondDiff = endTime.diff(start, 'seconds');
-      
-      if (secondDiff === 300) {
-        // if there are 5 minutes left, send out a text message indicating this
-        client.messages
-        .create({
-          to: '+16479882942',
-          from: '+16476997492',
-          body: 'There are five minutes left in your charge session!'
-        })
-        .then(message => console.log(message.sid));
-      }
 
-      if (secondDiff === 0) {
-        client.messages
-        .create({
-          to: '+16479882942',
-          from: '+16476997492',
-          body: 'Your charge session has now ended!'
-        })
-        .then(message => console.log(message.sid));
-      }
     
+    // if (secondDiff === 300) {
+    //   // if there are 5 minutes left, send out a text message indicating this
+    //   client.messages
+    //   .create({
+    //     to: '+16479882942',
+    //     from: '+16476997492',
+    //     body: 'There are five minutes left in your charge session!'
+    //   })
+    //   .then(message => console.log(message.sid));
+    // }
 
-      console.log(`Time Left: ${minuteDiff}:${secondDiff % 60}`);
-    });
-  });
-
-  // calls checkMemoryForTimeOuts every time tick interval (1 second)
-  setInterval(() => {
-    checkMemoryForTimeOuts(sessionEndTimes);
-  }, time_tick);
-
+    // if (secondDiff === 0) {
+    //   client.messages
+    //   .create({
+    //     to: '+16479882942',
+    //     from: '+16476997492',
+    //     body: 'Your charge session has now ended!'
+    //   })
+    //   .then(message => console.log(message.sid));
+    // }
+    
   // registration function
   const registration = (msg, ws, callback) => {
     return dataHelpers.retrieveUser(msg.data.email)
