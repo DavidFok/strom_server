@@ -268,47 +268,17 @@ ws.on('message', (message) => {
                 if (res[0] === "confirm") {
                   dataHelpers.createSession(result.userId, msg.data)
                     .then(() => {
-                    
-                      // calls the sendSMSMessage function at the appropriate time
-// const messageTimer = (messageType, phone_number, cb) => {
-//   let timeTill;
-//   let message;
-//   switch (messageType) {
-//     case: 'fiveMinWarning':
-//       timeTill = 5000;
-//       // timeTill = 25 * 60 * 1000;
-//       message = 'There are five minutes left in your charge session!';
-//       break;
-//     case: 'chargeFinished':
-//       timeTill = 10000;
-//       // timeTill = 30 * 60 * 1000;
-//       message = "Your charge session is over!";
-//       break;
-//   }
-//   setTimeout(() => {
-//     cb(message, phone_number);
-//   }, timeTill);
-// };
-
-// // sends out text message
-// const sendSMSMessage = (message, phone_number) => {
-//   const to_number = `+1${phone_number}`;
-//   client.messages
-//     .create({
-//       to: to_number,
-//       from: process.env.TWILIO_NUMBER,
-//       body: message
-//     })
-//     .then(message => console.log(message.sid));
-//   }
-// };
-                      
+                      console.log("result user id ==== ", result.userId);        
                       // send out new session confirmation to client side
+                      dataHelpers.findPhoneNumberOfUser(result.userId).then((result) => {
+                        console.log("phone number array: ", result[0].phone_number);
+                        const to_number = result[0].phone_number;
+                        // create timeout for 5 min warning sms message
+                        messageTimer('fiveMinWarning', to_number, sendSMSMessage);
+                        // create timeout for charge finished warning sms message                      
+                        messageTimer('chargeFinished', to_number, sendSMSMessage);                      
+                      });
                       ws.send(JSON.stringify(outMsgVcle));
-                      // create timeout for 5 min warning sms message
-                      messageTimer('fiveMinWarning', '6479882942', sendSMSMessage);
-                      // create timeout for charge finished warning sms message                      
-                      messageTimer('chargeFinished', '6479882942', sendSMSMessage);                      
                     });
                 } else {
                   ws.send(JSON.stringify(outMsgVcle));
