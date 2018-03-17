@@ -19,16 +19,14 @@ const knexLogger = require("knex-logger");
 const moment = require('moment');
 
 const dataHelpers = require("./lib/dataHelpers.js")(knex);
-const time_tick = 1000;
-
-// Twilio Credentials
-const accountSid = process.env.TWILIO_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
-
-// array of active user sessions
 // functions for handling sessions
 const sessionHandlers = require("./lib/sessionHandlers.js")(knex);
+const auth = require("./lib/auth.js")(dataHelpers, sessionHandlers);
+
+// Twilio Credentials
+const client = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+const text = require("./lib/smsHelpers.js")(client);
+
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -42,16 +40,6 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
-// keeps track of end times for charging sessions
-const sessionEndTimes = [];
-// load session end times from database into memory
-dataHelpers.loadSessionEndTimes().then((sessions) => {
-  sessions.forEach((session, index) => {
-    sessionEndTimes.push(session);
-  });
-});
-
-console.log("session end times: ", sessionEndTimes);
 
 // broadcast function
 wss.broadcast = function broadcast(data) {
@@ -62,139 +50,6 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
-// calls the sendSMSMessage function at the appropriate time
-const messageTimer = (messageType, phone_number, cb) => {
-  let timeTill;
-  let message;
-  switch (messageType) {
-    case 'fiveMinWarning':
-      timeTill = 5000;
-      // timeTill = 25 * 60 * 1000;
-      message = 'There are five minutes left in your charge session!';
-      break;
-    case 'chargeFinished':
-      timeTill = 10000;
-      // timeTill = 30 * 60 * 1000;
-      message = "Your charge session is over!";
-      break;
-  }
-  setTimeout(() => {
-    cb(message, phone_number);
-  }, timeTill);
-};
-
-// sends out text message
-const sendSMSMessage = (message, phone_number) => {
-  const to_number = `+1${phone_number}`;
-  client.messages
-    .create({
-      to: to_number,
-      from: process.env.TWILIO_NUMBER,
-      body: message
-    })
-    .then(message => console.log(message.sid));
-}
-
-
-
-
-  
-
-// if (secondDiff === 300) {
-//   // if there are 5 minutes left, send out a text message indicating this
-//   client.messages
-//   .create({
-//     to: '+16479882942',
-//     from: '+16476997492',
-//     body: 'There are five minutes left in your charge session!'
-//   })
-//   .then(message => console.log(message.sid));
-// }
-
-// if (secondDiff === 0) {
-//   client.messages
-//   .create({
-//     to: '+16479882942',
-//     from: '+16476997492',
-//     body: 'Your charge session has now ended!'
-//   })
-//   .then(message => console.log(message.sid));
-// }
-
-// registration function
-const registration = (msg, ws, callback) => {
-  return dataHelpers.retrieveUser(msg.data.email)
-    .then((result) => {
-      return dataHelpers.checkForUser(result);
-    })
-    .then((result) => {
-      let check = result[0];
-      let user = result[1][0];
-      if (check === false) {
-        // if the user is already registered
-        console.log("user is already registered");
-        ws.send(JSON.stringify({ route: "registerData", type: "err", data: "user exists" }));
-        return false;
-      } else {
-        // if the user is not yet registered
-        console.log("registering data");
-        // register user in database
-        return dataHelpers.registerUser(msg.data);
-      }
-
-    }).then((result) => {
-      // send out session token and user information to the client
-      if (result !== false) {
-        // if the registration was successful
-        ws.send(JSON.stringify({ route: "registerData", type: "confirm", data: "registration successful" }));
-        return true;
-      } else {
-        // if the registration was not successful
-        return false;
-      }
-    });
-};
-
-// login function
-const login = (msg, ws) => {
-  // query database for user by email
-  console.log('login requested!');
-  dataHelpers.retrieveUser(msg.data.email)
-    .then((result) => {
-      return dataHelpers.checkForUser(result);
-    })
-    .then((result) => {
-      let check = result[0];
-      let user = result[1][0];
-      if (check === false) {
-        // if the user is in the database
-        console.log("found user in database");
-        if (dataHelpers.checkUserPassword(msg.data.password, user.password_digest)) {
-          // if the password entered is correct
-          console.log("password correct!");
-          console.log("user.id: ", user.id);
-          // create a session for the user
-          let token = sessionHandlers.createSession(user.id);
-          let data = {
-            session_token: token,
-            user: user
-          };
-          token.then(() => {
-            ws.send(JSON.stringify({ route: 'loginData', type: "confirm", data: data }));
-            sessionHandlers.displaySessions();
-          });
-        } else {
-          // if the password entered is incorrect
-          console.log("password incorrect!");
-          ws.send(JSON.stringify({ route: 'loginData', type: "err", data: "password incorrect" }));
-        }
-      } else {
-        // if the user is not in the database
-        console.log("user is not in the database");
-        ws.send(JSON.stringify({ route: 'loginData', type: 'err', data: 'user not found' }));
-      }
-    });
-};
 
 wss.on("connection", (ws, req) => {
   ws.on("error", () => console.log("errored"));
@@ -221,16 +76,16 @@ ws.on('message', (message) => {
   switch (msg.type) {
     case 'register':
       // REGISTRATION: Upon user registration
-      registration(msg, ws, login).then((result) => {
+      auth.registration(msg, ws).then((result) => {
         // if the registration was successful, login the user
         if (result) {
-          login(msg, ws);
+          auth.login(msg, ws);
         }
       })
       break;
     case 'login':
       // LOGIN: Upon user login
-      login(msg, ws);
+      auth.login(msg, ws);
       break;
     case 'spots':
       console.log('parking spots requested');
@@ -274,9 +129,9 @@ ws.on('message', (message) => {
                         console.log("phone number array: ", result[0].phone_number);
                         const to_number = result[0].phone_number;
                         // create timeout for 5 min warning sms message
-                        messageTimer('fiveMinWarning', to_number, sendSMSMessage);
+                        text.messageTimer('fiveMinWarning', to_number, text.sendSMSMessage);
                         // create timeout for charge finished warning sms message                      
-                        messageTimer('chargeFinished', to_number, sendSMSMessage);                      
+                        text.messageTimer('chargeFinished', to_number, text.sendSMSMessage);                      
                       });
                       ws.send(JSON.stringify(outMsgVcle));
                     });
