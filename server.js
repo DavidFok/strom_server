@@ -102,6 +102,17 @@ wss.on("connection", (ws, req) => {
         .then(message => console.log(message.sid));
       }
 
+      if (secondDiff === 0) {
+        client.messages
+        .create({
+          to: '+16479882942',
+          from: '+16476997492',
+          body: 'Your charge session has now ended!'
+        })
+        .then(message => console.log(message.sid));
+      }
+    
+
       console.log(`Time Left: ${minuteDiff}:${secondDiff % 60}`);
     });
   });
