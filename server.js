@@ -127,6 +127,7 @@ wss.on("connection", (ws, req) => {
       // --------------- SESSION TOKEN API ------------------
 
       case 'session token':
+        console.log("message in session token switch case: ", msg);
         // upon user connection
         console.log('session_token received from client: ', msg.cookie);
 
