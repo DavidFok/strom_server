@@ -127,20 +127,27 @@ wss.on("connection", (ws, req) => {
       // --------------- SESSION TOKEN API ------------------
 
       case 'session token':
+        // upon user connection
+        console.log('session_token received from client: ', msg.cookie);
+
         sessionHandlers.handshake(msg.cookie)
         .then((result) => {
           console.log("handshake returned: ", result);
+
           let outMsgVcle = {
             route: "session token",
             type: "reject",
             data: null
           };
+
           // if the session has been found
-          if (result !== false) { outMsgVcle.type = "confirm" };
+          if (result !== false) {
+            outMsgVcle.type = "confirm";
+            outMsgVcle.data = { sessionData: result.session }; 
+          };
+          
           ws.send(JSON.stringify(outMsgVcle));
         });
-        // upon user connection
-        console.log('session_token received from client: ', msg.data);
         break;
 
       // ----------- PARKING SPOT DATA REQUEST API ----------
