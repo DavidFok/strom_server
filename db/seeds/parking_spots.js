@@ -6,7 +6,7 @@ exports.seed = function(knex, Promise) {
       // Inserts seed entries
       return knex('parking_spots').insert([
         {
-          spot_label: 0000001,
+          spot_label: 1,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -15,7 +15,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000002,
+          spot_label: 2,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -24,7 +24,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000003,
+          spot_label: 3,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -33,7 +33,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000004,
+          spot_label: 4,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -42,7 +42,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000005,
+          spot_label: 5,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -51,7 +51,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000006,
+          spot_label: 6,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -60,7 +60,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000007,
+          spot_label: 7,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -69,7 +69,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000008,
+          spot_label: 8,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -78,7 +78,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000009,
+          spot_label: 9,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -87,7 +87,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000010,
+          spot_label: 10,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -96,7 +96,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000011,
+          spot_label: 11,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -105,7 +105,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000012,
+          spot_label: 12,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -114,7 +114,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000013,
+          spot_label: 13,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -123,7 +123,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000014,
+          spot_label: 14,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -132,7 +132,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000015,
+          spot_label: 15,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -141,7 +141,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000016,
+          spot_label: 16,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -150,7 +150,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000017,
+          spot_label: 17,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -159,7 +159,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000018,
+          spot_label: 18,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -168,7 +168,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000019,
+          spot_label: 19,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -177,7 +177,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000020,
+          spot_label: 20,
           handicap: false,
           electric: true,
           cents_per_kwh: 0,
@@ -186,7 +186,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000021,
+          spot_label: 21,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -195,7 +195,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000022,
+          spot_label: 22,
           handicap: true,
           electric: true,
           cents_per_kwh: 100,
@@ -204,7 +204,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000023,
+          spot_label: 23,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -213,7 +213,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000024,
+          spot_label: 24,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -222,7 +222,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000025,
+          spot_label: 25,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -231,7 +231,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000026,
+          spot_label: 26,
           handicap: true,
           electric: true,
           cents_per_kwh: 100,
@@ -240,7 +240,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000027,
+          spot_label: 27,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -249,7 +249,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000028,
+          spot_label: 28,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -258,7 +258,7 @@ exports.seed = function(knex, Promise) {
           in_use: false
         },
         {
-          spot_label: 0000029,
+          spot_label: 29,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -267,7 +267,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000030,
+          spot_label: 30,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -276,7 +276,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000031,
+          spot_label: 31,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -285,7 +285,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000032,
+          spot_label: 32,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -294,7 +294,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000033,
+          spot_label: 33,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -303,7 +303,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000034,
+          spot_label: 34,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
@@ -312,7 +312,7 @@ exports.seed = function(knex, Promise) {
           in_use: true
         },
         {
-          spot_label: 0000035,
+          spot_label: 35,
           handicap: false,
           electric: true,
           cents_per_kwh: 100,
