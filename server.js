@@ -75,13 +75,21 @@ wss.on("connection", (ws, req) => {
   let promiseResult = dataHelpers.serveParkadeData();
   promiseResult.then((rows) => {
     let sendData = { route: "parkadeData", data: rows }
-    ws.send(JSON.stringify(sendData));
+    try {
+      ws.send(JSON.stringify(sendData));
+    } catch (error) {
+      console.error(error);
+    }
 
     // ********  DUMMY DATA DISPLAYING LIVE UPDATE ON MAP ***********
     setTimeout(function () {
       rows[0].occupied_regular = 4;
       sendData = { route: "parkadeData", data: rows }
-      ws.send(JSON.stringify(sendData));
+      try {
+        ws.send(JSON.stringify(sendData));
+      } catch (error) {
+        console.error(error);
+      }
     }, 5000);
     // ******************** END DUMMY DATA *************************
   });
@@ -147,7 +155,11 @@ wss.on("connection", (ws, req) => {
             outMsgVcle.data = { sessionData: result.session }; 
           };
           
-          ws.send(JSON.stringify(outMsgVcle));
+          try {
+            ws.send(JSON.stringify(outMsgVcle));
+          } catch (error) {
+            console.error(error);
+          }
         });
         break;
 
@@ -163,7 +175,11 @@ wss.on("connection", (ws, req) => {
                 type: "confirm",
                 data: spotsArr  //result: array of parking_spot objects
               }
-              ws.send(JSON.stringify(outMsgVcle));
+              try {
+                ws.send(JSON.stringify(outMsgVcle));
+              } catch (error) {
+                console.error(error);
+              }
             });
           })
     }
