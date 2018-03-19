@@ -12,7 +12,7 @@ exports.seed = function(knex, Promise) {
           password_digest: 12345,
           email: 'bla@bla.bla',
           handicap: false,
-          address_id: 7
+          address_id: 107
         }
       ]);
     });

@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.table('parkades', function(table){
-    table.foreign('address_id').references('addresses.id');
+    table.foreign('address_id').references('addresses.aid');
   });
 };
 
