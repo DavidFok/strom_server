@@ -82,15 +82,15 @@ wss.on("connection", (ws, req) => {
     }
 
     // ********  DUMMY DATA DISPLAYING LIVE UPDATE ON MAP ***********
-    setTimeout(function () {
-      rows[0].occupied_regular = 4;
-      sendData = { route: "parkadeData", data: rows }
-      try {
-        ws.send(JSON.stringify(sendData));
-      } catch (error) {
-        console.error(error);
-      }
-    }, 5000);
+    // setTimeout(function () {
+    //   rows[0].occupied_regular = 4;
+    //   sendData = { route: "parkadeData", data: rows }
+    //   try {
+    //     ws.send(JSON.stringify(sendData));
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }, 5000);
     // ******************** END DUMMY DATA *************************
   });
 

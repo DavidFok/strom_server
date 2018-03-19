@@ -1,7 +1,7 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('addresses', function(table){
-    table.increments('id').primary();
+    table.increments('aid').primary();
     table.string('street_line_1');
     table.string('street_line_2');
     table.string('city');
