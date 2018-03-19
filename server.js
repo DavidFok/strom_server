@@ -78,11 +78,11 @@ wss.on("connection", (ws, req) => {
     ws.send(JSON.stringify(sendData));
 
     // ********  DUMMY DATA DISPLAYING LIVE UPDATE ON MAP ***********
-    setTimeout(function () {
-      rows[0].occupied_regular = 4;
-      sendData = { route: "parkadeData", data: rows }
-      ws.send(JSON.stringify(sendData));
-    }, 5000);
+    // setTimeout(function () {
+    //   rows[0].occupied_regular = 4;
+    //   sendData = { route: "parkadeData", data: rows }
+    //   ws.send(JSON.stringify(sendData));
+    // }, 5000);
     // ******************** END DUMMY DATA *************************
   });
 
