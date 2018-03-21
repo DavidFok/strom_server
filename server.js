@@ -61,7 +61,7 @@ const wss = new SocketServer({ server });
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
+      client.send(JSON.stringify(data));
     }
   });
 };
@@ -129,7 +129,7 @@ wss.on("connection", (ws, req) => {
       // ---------------- PARKING SESSION -------------------
 
       case 'session request':
-          parkingHandler.initiateParkingSession(ws, msg);
+          parkingHandler.initiateParkingSession(ws, msg, wss.broadcast);
         break;
 
       // --------------- SESSION TOKEN API ------------------
